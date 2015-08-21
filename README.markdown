@@ -107,10 +107,10 @@ let myClass = MyModule.UsefulClass()
 
 ## Spacing
 
-* Indent using 2 spaces rather than tabs to conserve space and help prevent line wrapping.
+* Indent using 4 spaces rather than tabs.
 
 * Method braces and other braces (`if`/`else`/`switch`/`while` etc.) always open on the same line as the statement but close on a new line.
-* Tip: You can re-indent by selecting some code (or ⌘A to select all) and then Control-I (or Editor\Structure\Re-Indent in the menu). Some of the Xcode template code will have 4-space tabs hard coded, so this is a good way to fix that.
+* Tip: You can re-indent by selecting some code (or ⌘A to select all) and then Control-I (or Editor\Structure\Re-Indent in the menu).
 
 **Preferred:**
 ```swift
@@ -157,7 +157,7 @@ Here's an example of a well-styled class definition:
 
 ```swift
 class Circle: Shape {
-  var x: Int, y: Int
+  var centerX: Int, centerX: Int
   var radius: Double
   var diameter: Double {
     get {
@@ -284,8 +284,10 @@ func reticulateSplines(spline: [Double]) -> Bool {
 For functions with long signatures, add line breaks at appropriate points and add an extra indent on subsequent lines:
 
 ```swift
-func reticulateSplines(spline: [Double], adjustmentFactor: Double,
-    translateConstant: Int, comment: String) -> Bool {
+func reticulateSplines(spline: [Double], 
+					   adjustmentFactor: Double,
+    				   translateConstant: Int, 
+    				   comment: String) -> Bool {
   // reticulate code goes here
 }
 ```
@@ -533,7 +535,7 @@ The following copyright statement should be included at the top of every source
 file:
 
     /*
-     * Copyright (c) 2015 Razeware LLC
+     * Copyright (c) 2015 Droids on Roids LLC
      * 
      * Permission is hereby granted, free of charge, to any person obtaining a copy
      * of this software and associated documentation files (the "Software"), to deal
