@@ -63,8 +63,8 @@ For functions and init methods, prefer named parameters for all arguments unless
 
 ```swift
 func dateFromString(dateString: String) -> NSDate
-func convertPointAt(#column: Int, #row: Int) -> CGPoint
-func timedAction(#delay: NSTimeInterval, perform action: SKAction) -> SKAction!
+func convertPointAt(column column: Int, row: Int) -> CGPoint
+func timedAction(delay delay: NSTimeInterval, perform action: SKAction) -> SKAction!
 
 // would be called like this:
 dateFromString("2014-03-14")
@@ -161,31 +161,31 @@ class Circle: Shape {
     var radius: Double
     var diameter: Double {
         get {
-            return radius * 2
+            return radius * 2.0
         }
         set {
-            radius = newValue / 2
+            radius = newValue / 2.0
         }
     }
-    
+
     init(x: Int, y: Int, radius: Double) {
         self.x = x
         self.y = y
         self.radius = radius
     }
-    
+
     convenience init(x: Int, y: Int, diameter: Double) {
-        self.init(x: x, y: y, radius: diameter / 2)
+        self.init(x: x, y: y, radius: diameter / 2.0)
     }
-    
+
     func describe() -> String {
         return "I am a circle at \(centerString()) with an area of \(computeArea())"
     }
-    
+
     override func computeArea() -> Double {
         return M_PI * radius * radius
     }
-    
+
     private func centerString() -> String {
         return "(\(x),\(y))"
     }
@@ -209,11 +209,11 @@ Use `self` when required to differentiate between property names and arguments i
 ```swift
 class BoardLocation {
     let row: Int, column: Int
-    
+
     init(row: Int, column: Int) {
         self.row = row
         self.column = column
-        
+
         let closure = {
             println(self.row)
         }
@@ -258,7 +258,7 @@ For conciseness, if a computed property is read-only, omit the get clause. The g
 **Preferred:**
 ```swift
 var diameter: Double {
-    return radius * 2
+    return radius * 2.0
 }
 ```
 
@@ -266,7 +266,7 @@ var diameter: Double {
 ```swift
 var diameter: Double {
     get {
-        return radius * 2
+        return radius * 2.0
     }
 }
 ```
@@ -454,8 +454,8 @@ Prefer the shortcut versions of type declarations over the full generics syntax.
 
 **Preferred:**
 ```swift
-var deviceModels: [String]
-var employees: [Int: String]
+var deviceModels = [String]()
+var employees = [Int: String]()
 var faxNumber: Int?
 ```
 
@@ -536,17 +536,17 @@ file:
 
     /*
      * Copyright (c) 2015 Droids on Roids LLC
-     * 
+     *
      * Permission is hereby granted, free of charge, to any person obtaining a copy
      * of this software and associated documentation files (the "Software"), to deal
      * in the Software without restriction, including without limitation the rights
      * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
      * copies of the Software, and to permit persons to whom the Software is
      * furnished to do so, subject to the following conditions:
-     * 
+     *
      * The above copyright notice and this permission notice shall be included in
      * all copies or substantial portions of the Software.
-     * 
+     *
      * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
      * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
      * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -555,4 +555,3 @@ file:
      * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
      * THE SOFTWARE.
      */
-
