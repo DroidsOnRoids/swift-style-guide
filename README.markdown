@@ -29,7 +29,6 @@ Our style is based on Ray Wenderlich Style Guide with some changes of ours. Here
 * [Semicolons](#semicolons)
 * [Language](#language)
 * [Copyright Statement](#copyright-statement)
-* [Smiley Face](#smiley-face)
 * [Credits](#credits)
 
 
