@@ -109,6 +109,9 @@ let myClass = MyModule.UsefulClass()
 * Indent using 4 spaces rather than tabs.
 
 * Method braces and other braces (`if`/`else`/`switch`/`while` etc.) always open on the same line as the statement but close on a new line.
+
+* Exception: When using the `guard` keyword with an `else` statement containing only a `return` call, you should keep it in one line.
+
 * Tip: You can re-indent by selecting some code (or ⌘A to select all) and then Control-I (or Editor\Structure\Re-Indent in the menu).
 
 **Preferred:**
@@ -118,6 +121,8 @@ if user.isHappy {
 } else {
     // Do something else
 }
+
+guard let _ = superview as? UIView else { return }
 ```
 
 **Not Preferred:**
@@ -128,6 +133,12 @@ if user.isHappy
 }
 else {
     // Do something else
+}
+
+if user.isHappy { /* Do something */ }
+
+guard let _ = superview as? UIView else {
+   return
 }
 ```
 
