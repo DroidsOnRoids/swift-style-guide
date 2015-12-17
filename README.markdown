@@ -29,7 +29,6 @@ Our style is based on Ray Wenderlich Style Guide with some changes of ours. Here
 * [Semicolons](#semicolons)
 * [Language](#language)
 * [Copyright Statement](#copyright-statement)
-* [Credits](#credits)
 
 
 ## Naming
@@ -225,7 +224,7 @@ class BoardLocation {
         self.column = column
 
         let closure = {
-            println(self.row)
+            print(self.row)
         }
     }
 }
@@ -239,17 +238,17 @@ Also, don't forget the `// MARK: -` comment to keep things well-organized!
 
 **Preferred:**
 ```swift
-class MyViewcontroller: UIViewController {
+class MyViewController: UIViewController {
     // class stuff here
 }
 
 // MARK: - UITableViewDataSource
-extension MyViewcontroller: UITableViewDataSource {
+extension MyViewController: UITableViewDataSource {
     // table view data source methods
 }
 
 // MARK: - UIScrollViewDelegate
-extension MyViewcontroller: UIScrollViewDelegate {
+extension MyViewController: UIScrollViewDelegate {
     // scroll view delegate methods
 }
 ```
@@ -386,7 +385,7 @@ self.textContainer?.textLabel?.setNeedsDisplay()
 Use optional binding when it's more convenient to unwrap once and perform multiple operations:
 
 ```swift
-if let textContainer = self.textContainer {
+if let textContainer = textContainer {
     // do many things with textContainer
 }
 ```
@@ -484,23 +483,23 @@ Prefer the `for-in` style of `for` loop over the `for-condition-increment` style
 **Preferred:**
 ```swift
 for _ in 0..<3 {
-    println("Hello three times")
+    print("Hello three times")
 }
 
 for (index, person) in attendeeList.enumerate() {
-    println("\(person) is at position #\(index)")
+    print("\(person) is at position #\(index)")
 }
 ```
 
 **Not Preferred:**
 ```swift
 for var i = 0; i < 3; i++ {
-    println("Hello three times")
+    print("Hello three times")
 }
 
 for var i = 0; i < attendeeList.count; i++ {
     let person = attendeeList[i]
-    println("\(person) is at position #\(i)")
+    print("\(person) is at position #\(i)")
 }
 ```
 
