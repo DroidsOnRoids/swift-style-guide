@@ -118,20 +118,22 @@ let myClass = MyModule.UsefulClass()
 if user.isHappy {
     // Do something
 } else {
-    // Do something else
+   // Do something else
 }
 
-guard let _ = superview as? UIView else { return }
+guard let _ = superview as? UIView else { 
+   return 
+}
 ```
 
 **Not Preferred:**
 ```swift
 if user.isHappy
 {
-    // Do something
+   // Do something
 }
 else {
-    // Do something else
+   // Do something else
 }
 
 if user.isHappy { /* Do something */ }
@@ -274,9 +276,9 @@ var diameter: Double {
 **Not Preferred:**
 ```swift
 var diameter: Double {
-    get {
-        return radius * 2.0
-    }
+   get {
+     return radius * 2.0
+   }
 }
 ```
 
