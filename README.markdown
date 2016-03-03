@@ -121,8 +121,8 @@ if user.isHappy {
    // Do something else
 }
 
-guard let _ = superview as? UIView else { 
-   return 
+guard let _ = superview as? UIView else {
+   return
 }
 ```
 
@@ -546,7 +546,7 @@ The following copyright statement should be included at the top of every source
 file:
 
     /*
-     * Copyright (c) 2015 Droids on Roids LLC
+     * Copyright (c) 2015 Droids On Roids LLC
      *
      * Permission is hereby granted, free of charge, to any person obtaining a copy
      * of this software and associated documentation files (the "Software"), to deal
