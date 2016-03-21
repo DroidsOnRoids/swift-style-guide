@@ -552,9 +552,9 @@ var names: [String] = []
 
 **NOTE**: Following this guideline means picking descriptive names is even more important than before.
 
-### Arrays
+### CollectionType
 
-Usage of array methods such as `map`, `flatMap`, `filter`, `enumerate`, `first`, `last` is strongly encouraged.
+Usage of methods such as `map`, `flatMap`, `filter`, `enumerate`, `first`, `last` is strongly encouraged.
 
 ### Syntactic Sugar
 
