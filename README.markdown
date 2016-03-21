@@ -202,6 +202,8 @@ class SomeClass {
 
 * Avoid block comments inline with code, as the code should be as self-documenting as possible. *Exception: This does not apply to those comments used to generate documentation.*
 
+* Comments should rather say what is the code doing, not how
+
 ## Classes and Structures
 
 ### Which one to use?
@@ -219,7 +221,7 @@ Here's an example of a well-styled class definition:
 ```swift
 class Circle: Shape {
 
-    private var centerX: Int, centerX: Int
+    private var centerX: Int, centerY: Int
     var radius: Double
     var diameter: Double {
         get {
@@ -289,7 +291,7 @@ Use `self` when required to differentiate between property names and arguments i
 
 ```swift
 class BoardLocation {
-  
+
     let row: Int, column: Int
 
     init(row: Int, column: Int) {
@@ -385,11 +387,11 @@ func exampleMathFuncWith(x x: Double, y: Double) {
 **Preferred:**
 ```swift
 UIView.animateWithDuration(1.0) {
-    self.myView.alpha = 0
+    self.myView.alpha = 0.0
 }
 
 UIView.animateWithDuration(1.0, animations: {
-        self.myView.alpha = 0
+        self.myView.alpha = 0.0
     }, completion: { finished in
         self.myView.removeFromSuperview()
     }
@@ -400,12 +402,12 @@ UIView.animateWithDuration(1.0, animations: {
 ```swift
 UIView.animateWithDuration(1.0,
     animations: {
-      self.myView.alpha = 0
+      self.myView.alpha = 0.0
 })
 
 UIView.animateWithDuration(1.0,
     animations: {
-        self.myView.alpha = 0
+        self.myView.alpha = 0.0
     }) { f in
         self.myView.removeFromSuperview()
 }
@@ -609,9 +611,9 @@ for var i = 0; i < attendeeList.count; i++ {
 **Example**
 ```swift
 switch MobileOS(rawValue: int) {
-  case .Some(.iOS):
-    print("Yes, this is iOS")
-  default: ()
+    case .Some(.iOS):
+      print("Yes, this is iOS")
+    default: ()
 }
 ```
 
