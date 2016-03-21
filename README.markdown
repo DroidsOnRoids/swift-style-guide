@@ -47,6 +47,7 @@ Use descriptive names with camel case for classes, methods, variables, etc. Clas
 private let maximumWidgetCount = 100
 
 class WidgetContainer {
+
     var widgetButton: UIButton
     let widgetHeightPercentage = 0.85
 }
@@ -91,6 +92,7 @@ For methods, follow the standard Apple convention of referring to the first para
 
 ```swift
 class Guideline {
+
     func combineWithString(incoming: String, options: Dictionary?) { ... }
     func upvoteBy(amount: Int) { ... }
 }
@@ -174,6 +176,7 @@ guard let _ = superview as? UIView else {
 
 ```swift
 class ExampleClass {
+
   @IBOutlet weak var tableView: UITableView!
   @IBOutlet weak var collectionView: UICollectionView!
 
@@ -215,6 +218,7 @@ Here's an example of a well-styled class definition:
 
 ```swift
 class Circle: Shape {
+
     private var centerX: Int, centerX: Int
     var radius: Double
     var diameter: Double {
@@ -285,6 +289,7 @@ Use `self` when required to differentiate between property names and arguments i
 
 ```swift
 class BoardLocation {
+  
     let row: Int, column: Int
 
     init(row: Int, column: Int) {
