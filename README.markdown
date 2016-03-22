@@ -317,11 +317,11 @@ class MyViewController: UIViewController {
     // class stuff here
 }
 
-extension MyViewControllerDataSourceExtension: UITableViewDataSource {
+extension MyViewController: UITableViewDataSource {
     // table view data source methods
 }
 
-extension MyViewControllerDelegateExtension: UIScrollViewDelegate {
+extension MyViewController: UIScrollViewDelegate {
     // scroll view delegate methods
 }
 ```
@@ -611,9 +611,9 @@ for var i = 0; i < attendeeList.count; i++ {
 **Example**
 ```swift
 switch MobileOS(rawValue: int) {
-    case .Some(.iOS):
-      print("Yes, this is iOS")
-    default: ()
+case .Some(.iOS):
+    print("Yes, this is iOS")
+default: ()
 }
 ```
 
