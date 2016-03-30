@@ -574,7 +574,7 @@ var employees: Dictionary<Int, String>
 var faxNumber: Optional<Int>
 ```
 
-* Use Core Geometry methods such as `CGRectGetWidth` or `CGRectGetMidY` to access view's properties.
+* Use convenient Swift Core Geometry methods such as `someFrame.width` or `someframe.midX` to access view's properties.
 * Use `nil` only in method calls or assignments. Do not compare to `nil` in conditional statements.
 
 ## Control Flow
