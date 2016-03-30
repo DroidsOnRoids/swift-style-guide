@@ -10,13 +10,17 @@ Our style is based on Ray Wenderlich Style Guide with some changes of ours. Here
 ## Table of Contents
 
 * [Naming](#naming)
+    * [Enumerations](#enumerations)
     * [Class Prefixes](#class-prefixes)
 * [Spacing](#spacing)
 * [Comments](#comments)
 * [Classes and Structures](#classes-and-structures)
+    * [App Delegate](#app-delegate)
+    * [Singleton](#singleton)
     * [Use of Self](#use-of-self)
     * [Protocol Conformance](#protocol-conformance)
     * [Computed Properties](#computed-properties)
+    * [Extensions](#extensions)
 * [Function Declarations](#function-declarations)
 * [Closure Expressions](#closure-expressions)
 * [Types](#types)
@@ -24,8 +28,10 @@ Our style is based on Ray Wenderlich Style Guide with some changes of ours. Here
     * [Optionals](#optionals)
     * [Struct Initializers](#struct-initializers)
     * [Type Inference](#type-inference)
+    * [Arrays](#arrays)
     * [Syntactic Sugar](#syntactic-sugar)
 * [Control Flow](#control-flow)
+* [Statements](#statements)
 * [Semicolons](#semicolons)
 * [Language](#language)
 * [Copyright Statement](#copyright-statement)
@@ -41,6 +47,7 @@ Use descriptive names with camel case for classes, methods, variables, etc. Clas
 private let maximumWidgetCount = 100
 
 class WidgetContainer {
+
     var widgetButton: UIButton
     let widgetHeightPercentage = 0.85
 }
@@ -55,6 +62,17 @@ class app_widgetContainer {
     var wBut: UIButton
     let wHeightPct = 0.85
 }
+```
+
+Types such as `Float`, `CGFloat` or `Double` should always be represented as floating point numbers.
+
+**Preffered**
+```swift
+var floatNumber: Float = 1.0
+```
+**Not preffered**
+```swift
+var floatNumber: Float = 1
 ```
 
 For functions and init methods, prefer named parameters for all arguments unless the context is very clear. Include external parameter names if it makes function calls more readable.
@@ -74,6 +92,7 @@ For methods, follow the standard Apple convention of referring to the first para
 
 ```swift
 class Guideline {
+
     func combineWithString(incoming: String, options: Dictionary?) { ... }
     func upvoteBy(amount: Int) { ... }
 }
@@ -81,14 +100,24 @@ class Guideline {
 
 ### Enumerations
 
-Use UpperCamelCase for enumeration values:
+Use UpperCamelCase for enumeration values.
 
+Every new case should be declared in a new line. Avoid writing one-line, comma-separated cases.
+
+**Preffered**
 ```swift
 enum Shape {
     case Rectangle
     case Square
     case Triangle
     case Circle
+}
+```
+
+**Not preffered**
+```swift
+enum Shape {
+  case Rectangle, Square, Triangle, Circle
 }
 ```
 
@@ -121,9 +150,7 @@ if user.isHappy {
    // Do something else
 }
 
-guard let _ = superview as? UIView else {
-   return
-}
+guard let _ = superview as? UIView else { return }
 ```
 
 **Not Preferred:**
@@ -145,12 +172,37 @@ guard let _ = superview as? UIView else {
 
 * There should be exactly one blank line between methods to aid in visual clarity and organization. Whitespace within methods should separate functionality, but having too many sections in a method often means you should refactor into several methods.
 
+* Use one blank line to separate the variables declarations. Outlets at the top, then the delegate, and then the rest of the variables.
+
+```swift
+class ExampleClass {
+
+  @IBOutlet weak var tableView: UITableView!
+  @IBOutlet weak var collectionView: UICollectionView!
+
+  weak var someDelegate: SomeDelegate?
+  weak var anotherDelegate: AnotherDelegate?
+
+  var someArray: [String]?
+  var counter = 0
+}
+```
+* Use exactly one new line at the beggining of a class or struct to add clarity. No new lines at the end.
+
+```swift
+class SomeClass {
+
+    var someArray: [Float]?
+}
+```
+
 ## Comments
 
-When they are needed, use comments to explain **why** a particular piece of code does something. Comments must be kept up-to-date or deleted.
+* When they are needed, use comments to explain **why** a particular piece of code does something. Comments must be kept up-to-date or deleted.
 
-Avoid block comments inline with code, as the code should be as self-documenting as possible. *Exception: This does not apply to those comments used to generate documentation.*
+* Avoid block comments inline with code, as the code should be as self-documenting as possible. *Exception: This does not apply to those comments used to generate documentation.*
 
+* Comments should rather say what is the code doing, not how
 
 ## Classes and Structures
 
@@ -168,7 +220,8 @@ Here's an example of a well-styled class definition:
 
 ```swift
 class Circle: Shape {
-    var centerX: Int, centerX: Int
+
+    private var centerX: Int, centerY: Int
     var radius: Double
     var diameter: Double {
         get {
@@ -208,8 +261,27 @@ The example above demonstrates the following style guidelines:
  + Specify types for properties, variables, constants, argument declarations and other statements with a space after the colon but not before, e.g. `x: Int`, and `Circle: Shape`.
  + Define multiple variables and structures on a single line if they share a common purpose / context.
  + Indent getter and setter definitions and property observers.
- + Don't add modifiers such as `internal` when they're already the default. Similarly, don't repeat the access modifier when overriding a method.
+ + Make wise use of modifiers but don't add `internal` in a case when it is already the default. Similarly, don't repeat the access modifier when overriding a method.
+ + Don't bloat view controller's life-cycle methods. Encapsulate code to new setup methods to achieve code clarity.
 
+
+### App Delegate
+
+Limit your code in App Delegate to an absolute minimum.
+
+### Singleton
+
+Take advantage of Swift's modern syntax and create singletons using static class variables.
+
+***Remember***: Use singletons only when it's really neccessary
+
+**Example**
+```swift
+class Users: NSObject {
+
+    static let sharedInstance = Users()
+}
+```
 
 ### Use of Self
 
@@ -219,6 +291,7 @@ Use `self` when required to differentiate between property names and arguments i
 
 ```swift
 class BoardLocation {
+
     let row: Int, column: Int
 
     init(row: Int, column: Int) {
@@ -236,7 +309,7 @@ class BoardLocation {
 
 When adding protocol conformance to a class, prefer adding a separate class extension for the protocol methods. This keeps the related methods grouped together with the protocol and can simplify instructions to add a protocol to a class with its associated methods.
 
-Also, don't forget the `// MARK: -` comment to keep things well-organized!
+Avoid using `// MARK: -` comment to describe extensions. Extension's name should be self explanatory.
 
 **Preferred:**
 ```swift
@@ -244,12 +317,10 @@ class MyViewController: UIViewController {
     // class stuff here
 }
 
-// MARK: - UITableViewDataSource
 extension MyViewController: UITableViewDataSource {
     // table view data source methods
 }
 
-// MARK: - UIScrollViewDelegate
 extension MyViewController: UIScrollViewDelegate {
     // scroll view delegate methods
 }
@@ -261,6 +332,7 @@ class MyViewcontroller: UIViewController, UITableViewDataSource, UIScrollViewDel
     // all methods
 }
 ```
+
 
 ### Computed Properties
 
@@ -282,9 +354,13 @@ var diameter: Double {
 }
 ```
 
+### Extensions
+
+Avoid having too many extensions in a view controller. Create new files for additional extensions in order to increase readability.
+
 ## Function Declarations
 
-Keep short function declarations on one line including the opening brace:
+Keep function declarations in one line including the opening brace:
 
 ```swift
 func reticulateSplines(spline: [Double]) -> Bool {
@@ -292,33 +368,31 @@ func reticulateSplines(spline: [Double]) -> Bool {
 }
 ```
 
-For functions with long signatures, add line breaks at appropriate points and add an extra indent on subsequent lines:
+For functions that take any kind of methematical parameters or geometric variables, all those parameters should have explicit names:
 
 ```swift
-func reticulateSplines(spline: [Double],
-    adjustmentFactor: Double,
-    translateConstant: Int,
-    comment: String) -> Bool {
-    // reticulate code goes here
+func exampleMathFuncWith(x x: Double, y: Double) {
+  // code
 }
 ```
 
-
 ## Closure Expressions
 
-Use trailing closure syntax only if there's a single closure expression parameter at the end of the argument list. Give the closure parameters descriptive names.
+* Use trailing closure syntax only if there's a single closure expression parameter at the end of the argument list. Give the closure parameters descriptive names.
+* Use `[unowned self]` in closures if you're sure that `self` will **NEVER** be nil
+* Use `[weak self]` in closures if you're sure that `self` **COULD** be nil
+
+**HINT:** For reference and further understanding on the subject please check the [Automatic Reference Counting](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/AutomaticReferenceCounting.html) explanation.
 
 **Preferred:**
 ```swift
 UIView.animateWithDuration(1.0) {
-    self.myView.alpha = 0
+    self.myView.alpha = 0.0
 }
 
-UIView.animateWithDuration(1.0,
-    animations: {
-        self.myView.alpha = 0
-    },
-    completion: { finished in
+UIView.animateWithDuration(1.0, animations: {
+        self.myView.alpha = 0.0
+    }, completion: { finished in
         self.myView.removeFromSuperview()
     }
 )
@@ -326,19 +400,20 @@ UIView.animateWithDuration(1.0,
 
 **Not Preferred:**
 ```swift
-UIView.animateWithDuration(1.0, animations: {
-    self.myView.alpha = 0
+UIView.animateWithDuration(1.0,
+    animations: {
+      self.myView.alpha = 0.0
 })
 
 UIView.animateWithDuration(1.0,
     animations: {
-        self.myView.alpha = 0
+        self.myView.alpha = 0.0
     }) { f in
         self.myView.removeFromSuperview()
 }
 ```
 
-For single-expression closures where the context is clear, use implicit returns:
+* For single-expression closures where the context is clear, use implicit returns:
 
 ```swift
 attendeeList.sort { a, b in
@@ -346,6 +421,25 @@ attendeeList.sort { a, b in
 }
 ```
 
+* Remove not needed `() -> Void` statements in closures, replace `Void` with `()`. Exception to that rule is when Apple requires the explicit type from us. Otherwise remove them.
+
+**Preffered**
+```swift
+UIView.animateWithDuration(2.0, animations: {
+    // ...
+  }) { _ in
+    // ...
+}
+```
+
+** Not preffered**
+```swift
+UIView.animateWithDuration(0.2, animations: { () -> Void in
+    // ...
+    }) { (_) -> Void in
+    // ...
+}
+```
 
 ## Types
 
@@ -458,10 +552,13 @@ var names: [String] = []
 
 **NOTE**: Following this guideline means picking descriptive names is even more important than before.
 
+### CollectionType
+
+Usage of methods such as `map`, `flatMap`, `filter`, `enumerate`, `first`, `last` is strongly encouraged.
 
 ### Syntactic Sugar
 
-Prefer the shortcut versions of type declarations over the full generics syntax.
+* Prefer the shortcut versions of type declarations over the full generics syntax.
 
 **Preferred:**
 ```swift
@@ -477,10 +574,13 @@ var employees: Dictionary<Int, String>
 var faxNumber: Optional<Int>
 ```
 
+* Use convenient Swift Core Geometry methods such as `someFrame.width` or `someframe.midX` to access view's properties.
+* Use `nil` only in method calls or assignments. Do not compare to `nil` in conditional statements.
 
 ## Control Flow
 
-Prefer the `for-in` style of `for` loop over the `for-condition-increment` style.
+### For-in loop
+* Prefer the `for-in` style of `for` loop over the `for-condition-increment` style.
 
 **Preferred:**
 ```swift
@@ -505,6 +605,44 @@ for var i = 0; i < attendeeList.count; i++ {
 }
 ```
 
+### Switch
+* Use `()` notation instead of `break` in default switch cases when there is no other instruction contained in it
+
+**Example**
+```swift
+switch MobileOS(rawValue: int) {
+case .Some(.iOS):
+    print("Yes, this is iOS")
+default: ()
+}
+```
+
+
+## Statements
+
+* Use `guard` statement to exit the method execution early when condition ***is not met***.
+* Use `where` and `is` operators when it's neccessary
+* Keep the amount of code in a guard's `else` statement to a minimum. Ideally only `return` should resign there.
+
+**Example**
+```swift
+guard let str = string where str != "someString" else {  
+    fatalError("something went wrong")
+}
+```
+* Keep `guard` statements comma-separated and avoid repeating `let` or `var` keyword
+
+**Example**
+```swift
+var first: Int?
+var second: Int?
+
+func letGuard() {
+    guard let first = first, second = second else { return }
+    print(first)
+    print(second)
+}
+```
 
 ## Semicolons
 
