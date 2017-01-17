@@ -1,4 +1,4 @@
-# The Official Droids on Roids Swift Style Guide.
+# The Official Droids On Roids Swift Style Guide
 
 ## Introduction
 
@@ -10,17 +10,13 @@ Our style is based on Ray Wenderlich Style Guide with some changes of ours. Here
 ## Table of Contents
 
 * [Naming](#naming)
-    * [Enumerations](#enumerations)
-    * [Class Prefixes](#class-prefixes)
 * [Spacing](#spacing)
-* [Comments](#comments)
 * [Classes and Structures](#classes-and-structures)
     * [App Delegate](#app-delegate)
     * [Singleton](#singleton)
     * [Use of Self](#use-of-self)
     * [Protocol Conformance](#protocol-conformance)
     * [Computed Properties](#computed-properties)
-    * [Extensions](#extensions)
 * [Function Declarations](#function-declarations)
 * [Closure Expressions](#closure-expressions)
 * [Types](#types)
@@ -28,7 +24,7 @@ Our style is based on Ray Wenderlich Style Guide with some changes of ours. Here
     * [Optionals](#optionals)
     * [Struct Initializers](#struct-initializers)
     * [Type Inference](#type-inference)
-    * [Arrays](#arrays)
+    * [Collections](#collections)
     * [Syntactic Sugar](#syntactic-sugar)
 * [Control Flow](#control-flow)
 * [Statements](#statements)
@@ -98,40 +94,6 @@ class Guideline {
 }
 ```
 
-### Enumerations
-
-Use UpperCamelCase for enumeration values.
-
-Every new case should be declared in a new line. Avoid writing one-line, comma-separated cases.
-
-**Preffered**
-```swift
-enum Shape {
-    case Rectangle
-    case Square
-    case Triangle
-    case Circle
-}
-```
-
-**Not preffered**
-```swift
-enum Shape {
-  case Rectangle, Square, Triangle, Circle
-}
-```
-
-### Class Prefixes
-
-Swift types are automatically namespaced by the module that contains them and you should not add a class prefix. If two names from different modules collide you can disambiguate by prefixing the type name with the module name.
-
-```swift
-import SomeModule
-
-let myClass = MyModule.UsefulClass()
-```
-
-
 ## Spacing
 
 * Indent using 4 spaces rather than tabs.
@@ -175,34 +137,26 @@ guard let _ = superview as? UIView else {
 * Use one blank line to separate the variables declarations. Outlets at the top, then the delegate, and then the rest of the variables.
 
 ```swift
-class ExampleClass {
+class Example {
 
-  @IBOutlet weak var tableView: UITableView!
-  @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var collectionView: UICollectionView!
 
-  weak var someDelegate: SomeDelegate?
-  weak var anotherDelegate: AnotherDelegate?
+    weak var someDelegate: SomeDelegate?
+    weak var anotherDelegate: AnotherDelegate?
 
-  var someArray: [String]?
-  var counter = 0
+    var someArray: [String]?
+    var counter = 0
 }
 ```
-* Use exactly one new line at the beggining of a class or struct to add clarity. No new lines at the end.
+* Use exactly one new line at the beginning of a class or struct to add clarity. No new lines at the end.
 
 ```swift
-class SomeClass {
+class Example {
 
     var someArray: [Float]?
 }
 ```
-
-## Comments
-
-* When they are needed, use comments to explain **why** a particular piece of code does something. Comments must be kept up-to-date or deleted.
-
-* Avoid block comments inline with code, as the code should be as self-documenting as possible. *Exception: This does not apply to those comments used to generate documentation.*
-
-* Comments should rather say what is the code doing, not how
 
 ## Classes and Structures
 
@@ -211,8 +165,6 @@ class SomeClass {
 Remember, structs have [value semantics](https://developer.apple.com/library/mac/documentation/Swift/Conceptual/Swift_Programming_Language/ClassesAndStructures.html#//apple_ref/doc/uid/TP40014097-CH13-XID_144). Use structs for things that do not have an identity. An array that contains [a, b, c] is really the same as another array that contains [a, b, c] and they are completely interchangeable. It doesn't matter whether you use the first array or the second, because they represent the exact same thing. That's why arrays are structs.
 
 Classes have [reference semantics](https://developer.apple.com/library/mac/documentation/Swift/Conceptual/Swift_Programming_Language/ClassesAndStructures.html#//apple_ref/doc/uid/TP40014097-CH13-XID_145). Use classes for things that do have an identity or a specific life cycle. You would model a person as a class because two person objects are two different things. Just because two people have the same name and birthdate, doesn't mean they are the same person. But the person's birthdate would be a struct because a date of 3 March 1950 is the same as any other date object for 3 March 1950. The date itself doesn't have an identity.
-
-Sometimes, things should be structs but need to conform to `AnyObject` or are historically modeled as classes already (`NSDate`, `NSSet`). Try to follow these guidelines as closely as possible.
 
 ### Example definition
 
@@ -231,6 +183,15 @@ class Circle: Shape {
             radius = newValue / 2.0
         }
     }
+    var description: String {
+        return "I am a circle at \(centerString) with an area of \(computedArea)"
+    }
+    override var computedArea: Double {
+        return M_PI * radius * radius
+    }
+    private var centerString: String {
+        return "(\(x), \(y))"
+    }
 
     init(x: Int, y: Int, radius: Double) {
         self.x = x
@@ -242,16 +203,8 @@ class Circle: Shape {
         self.init(x: x, y: y, radius: diameter / 2.0)
     }
 
-    func describe() -> String {
-        return "I am a circle at \(centerString()) with an area of \(computeArea())"
-    }
-
-    override func computeArea() -> Double {
-        return M_PI * radius * radius
-    }
-
-    private func centerString() -> String {
-        return "(\(x),\(y))"
+    func doFunnyTrick() {
+        flipTheTable()
     }
 }
 ```
@@ -259,9 +212,10 @@ class Circle: Shape {
 The example above demonstrates the following style guidelines:
 
  + Specify types for properties, variables, constants, argument declarations and other statements with a space after the colon but not before, e.g. `x: Int`, and `Circle: Shape`.
+ + Use computed properties instead of functions when it only returns an instance of class or object and doesn't modify existing instances or states.
  + Define multiple variables and structures on a single line if they share a common purpose / context.
  + Indent getter and setter definitions and property observers.
- + Make wise use of modifiers but don't add `internal` in a case when it is already the default. Similarly, don't repeat the access modifier when overriding a method.
+ + Make wise use of modifiers, but don't add `internal` in a case when it is already the default. Similarly, don't repeat the access modifier when overriding a method.
  + Don't bloat view controller's life-cycle methods. Encapsulate code to new setup methods to achieve code clarity.
 
 
@@ -273,7 +227,7 @@ Limit your code in App Delegate to an absolute minimum.
 
 Take advantage of Swift's modern syntax and create singletons using static class variables.
 
-***Remember***: Use singletons only when it's really neccessary
+***Remember***: Use singletons only when it's really necessary.
 
 **Example**
 ```swift
@@ -298,7 +252,7 @@ class BoardLocation {
         self.row = row
         self.column = column
 
-        let closure = {
+        let closure = { [unowned self] in
             print(self.row)
         }
     }
@@ -328,7 +282,7 @@ extension MyViewController: UIScrollViewDelegate {
 
 **Not Preferred:**
 ```swift
-class MyViewcontroller: UIViewController, UITableViewDataSource, UIScrollViewDelegate {
+class MyViewController: UIViewController, UITableViewDataSource, UIScrollViewDelegate {
     // all methods
 }
 ```
@@ -354,10 +308,6 @@ var diameter: Double {
 }
 ```
 
-### Extensions
-
-Avoid having too many extensions in a view controller. Create new files for additional extensions in order to increase readability.
-
 ## Function Declarations
 
 Keep function declarations in one line including the opening brace:
@@ -379,8 +329,8 @@ func exampleMathFuncWith(x x: Double, y: Double) {
 ## Closure Expressions
 
 * Use trailing closure syntax only if there's a single closure expression parameter at the end of the argument list. Give the closure parameters descriptive names.
-* Use `[unowned self]` in closures if you're sure that `self` will **NEVER** be nil
-* Use `[weak self]` in closures if you're sure that `self` **COULD** be nil
+* Use `[unowned self]` in closures if you're sure that `self` will **NEVER** be nil.
+* Use `[weak self]` in closures if you're sure that `self` **COULD** be nil.
 
 **HINT:** For reference and further understanding on the subject please check the [Automatic Reference Counting](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/AutomaticReferenceCounting.html) explanation.
 
@@ -416,28 +366,27 @@ UIView.animateWithDuration(1.0,
 * For single-expression closures where the context is clear, use implicit returns:
 
 ```swift
-attendeeList.sort { a, b in
-    a > b
-}
+attendeeList.sort { a, b in a > b }
 ```
 
-* Remove not needed `() -> Void` statements in closures, replace `Void` with `()`. Exception to that rule is when Apple requires the explicit type from us. Otherwise remove them.
+* Remove not needed `() -> Void` statements in closures. Exception to that rule is when Apple requires the explicit type from us.
 
 **Preffered**
 ```swift
 UIView.animateWithDuration(2.0, animations: {
-    // ...
-  }) { _ in
-    // ...
-}
+        // ...
+    }, completion: { _ in
+        // ...
+    }
+)
 ```
 
-** Not preffered**
+**Not preffered**
 ```swift
 UIView.animateWithDuration(0.2, animations: { () -> Void in
-    // ...
+        // ...
     }) { (_) -> Void in
-    // ...
+        // ...
 }
 ```
 
@@ -485,10 +434,6 @@ if let textContainer = textContainer {
     // do many things with textContainer
 }
 ```
-
-When naming optional variables and properties, avoid naming them like `optionalString` or `maybeView` since their optional-ness is already in the type declaration.
-
-For optional binding, shadow the original name when appropriate rather than using names like `unwrappedView` or `actualLabel`.
 
 **Preferred:**
 ```swift
@@ -552,7 +497,7 @@ var names: [String] = []
 
 **NOTE**: Following this guideline means picking descriptive names is even more important than before.
 
-### CollectionType
+### Collections
 
 Usage of methods such as `map`, `flatMap`, `filter`, `enumerate`, `first`, `last` is strongly encouraged.
 
@@ -575,54 +520,26 @@ var faxNumber: Optional<Int>
 ```
 
 * Use convenient Swift Core Geometry methods such as `someFrame.width` or `someframe.midX` to access view's properties.
-* Use `nil` only in method calls or assignments. Do not compare to `nil` in conditional statements.
+* Use `nil` only in method calls or assignments. Avoid comparing to `nil` in conditional statements, unless it increases the visibility.
 
 ## Control Flow
 
-### For-in loop
-* Prefer the `for-in` style of `for` loop over the `for-condition-increment` style.
-
-**Preferred:**
-```swift
-for _ in 0..<3 {
-    print("Hello three times")
-}
-
-for (index, person) in attendeeList.enumerate() {
-    print("\(person) is at position #\(index)")
-}
-```
-
-**Not Preferred:**
-```swift
-for var i = 0; i < 3; i++ {
-    print("Hello three times")
-}
-
-for var i = 0; i < attendeeList.count; i++ {
-    let person = attendeeList[i]
-    print("\(person) is at position #\(i)")
-}
-```
-
 ### Switch
-* Use `()` notation instead of `break` in default switch cases when there is no other instruction contained in it
+* Use `()` notation instead of `break` in default switch cases when there is no other instruction contained in it.
 
 **Example**
 ```swift
-switch MobileOS(rawValue: int) {
-case .Some(.iOS):
+switch mobileOS {
+case .iOS:
     print("Yes, this is iOS")
 default: ()
 }
 ```
 
-
 ## Statements
 
 * Use `guard` statement to exit the method execution early when condition ***is not met***.
-* Use `where` and `is` operators when it's neccessary
-* Keep the amount of code in a guard's `else` statement to a minimum. Ideally only `return` should resign there.
+* Keep the amount of code in a guard's `else` statement to a minimum.
 
 **Example**
 ```swift
@@ -630,7 +547,7 @@ guard let str = string where str != "someString" else {
     fatalError("something went wrong")
 }
 ```
-* Keep `guard` statements comma-separated and avoid repeating `let` or `var` keyword
+* Keep `guard` statements comma-separated and avoid repeating `let` or `var` keyword.
 
 **Example**
 ```swift
@@ -648,10 +565,6 @@ func letGuard() {
 
 Swift does not require a semicolon after each statement in your code. They are only required if you wish to combine multiple statements on a single line.
 
-Do not write multiple statements on a single line separated with semicolons.
-
-The only exception to this rule is the `for-conditional-increment` construct, which requires semicolons. However, alternative `for-in` constructs should be used where possible.
-
 **Preferred:**
 ```swift
 let swift = "not a scripting language"
@@ -662,7 +575,7 @@ let swift = "not a scripting language"
 let swift = "not a scripting language";
 ```
 
-**NOTE**: Swift is very different to JavaScript, where omitting semicolons is [generally considered unsafe](http://stackoverflow.com/questions/444080/do-you-recommend-using-semicolons-after-every-statement-in-javascript)
+**NOTE**: Swift is very different to JavaScript, where omitting semicolons is [generally considered unsafe](http://stackoverflow.com/questions/444080/do-you-recommend-using-semicolons-after-every-statement-in-javascript).
 
 ## Language
 
@@ -684,7 +597,7 @@ The following copyright statement should be included at the top of every source
 file:
 
     /*
-     * Copyright (c) 2015 Droids On Roids LLC
+     * Copyright (c) 2017 Droids On Roids LLC
      *
      * Permission is hereby granted, free of charge, to any person obtaining a copy
      * of this software and associated documentation files (the "Software"), to deal
