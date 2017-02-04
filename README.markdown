@@ -190,12 +190,12 @@ class Circle: Shape {
         return M_PI * radius * radius
     }
     private var centerString: String {
-        return "(\(x), \(y))"
+        return "(\(centerX), \(centerY))"
     }
 
     init(x: Int, y: Int, radius: Double) {
-        self.x = x
-        self.y = y
+        centerX = x
+        centerY = y
         self.radius = radius
     }
 
@@ -204,7 +204,8 @@ class Circle: Shape {
     }
 
     func doFunnyTrick() {
-        flipTheTable()
+        // Here comes a business logic, a complex calculations, etc.
+        // Use computed properties if you only return a value.
     }
 }
 ```
@@ -215,7 +216,7 @@ The example above demonstrates the following style guidelines:
  + Use computed properties instead of functions when it only returns an instance of class or object and doesn't modify existing instances or states.
  + Define multiple variables and structures on a single line if they share a common purpose / context.
  + Indent getter and setter definitions and property observers.
- + Make wise use of modifiers, but don't add `internal` in a case when it is already the default. Similarly, don't repeat the access modifier when overriding a method.
+ + Make wise use of modifiers, but don't add `internal` in case when it is already the default. Similarly, don't repeat the access modifier when overriding a method.
  + Don't bloat view controller's life-cycle methods. Encapsulate code to new setup methods to achieve code clarity.
 
 
@@ -231,7 +232,7 @@ Take advantage of Swift's modern syntax and create singletons using static class
 
 **Example**
 ```swift
-class Users: NSObject {
+class Users {
 
     static let sharedInstance = Users()
 }
@@ -282,7 +283,7 @@ extension MyViewController: UIScrollViewDelegate {
 
 **Not Preferred:**
 ```swift
-class MyViewController: UIViewController, UITableViewDataSource, UIScrollViewDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UIScrollViewDelegate {
     // all methods
 }
 ```
@@ -318,7 +319,7 @@ func reticulateSplines(spline: [Double]) -> Bool {
 }
 ```
 
-For functions that take any kind of methematical parameters or geometric variables, all those parameters should have explicit names:
+For functions that take any kind of mathematical parameters or geometric variables, all those parameters should have explicit names:
 
 ```swift
 func exampleMathFuncWith(x x: Double, y: Double) {
@@ -370,25 +371,6 @@ attendeeList.sort { a, b in a > b }
 ```
 
 * Remove not needed `() -> Void` statements in closures. Exception to that rule is when Apple requires the explicit type from us.
-
-**Preffered**
-```swift
-UIView.animateWithDuration(2.0, animations: {
-        // ...
-    }, completion: { _ in
-        // ...
-    }
-)
-```
-
-**Not preffered**
-```swift
-UIView.animateWithDuration(0.2, animations: { () -> Void in
-        // ...
-    }) { (_) -> Void in
-        // ...
-}
-```
 
 ## Types
 
@@ -520,7 +502,7 @@ var faxNumber: Optional<Int>
 ```
 
 * Use convenient Swift Core Geometry methods such as `someFrame.width` or `someframe.midX` to access view's properties.
-* Use `nil` only in method calls or assignments. Avoid comparing to `nil` in conditional statements, unless it increases the visibility.
+* Use `nil` only in method calls or assignments. Compare to `nil` in conditional statements, if it increases the readability of your code.
 
 ## Control Flow
 
@@ -564,6 +546,8 @@ func letGuard() {
 ## Semicolons
 
 Swift does not require a semicolon after each statement in your code. They are only required if you wish to combine multiple statements on a single line.
+
+Do not write multiple statements on a single line separated with semicolons.
 
 **Preferred:**
 ```swift
