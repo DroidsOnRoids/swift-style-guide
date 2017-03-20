@@ -6,11 +6,14 @@ Our style is based on Ray Wenderlich Style Guide with some changes of ours. Here
 
 * [Ray Wenderlich Swift Style Guide](https://github.com/raywenderlich/swift-style-guide)
 
-
 ## Table of Contents
 
 * [Naming](#naming)
-* [Spacing](#spacing)
+    * [Type Inferred Context](#type-inferred-context)
+* [Code Organization](#code-organization)
+    * [Unused Code](#unused-code)
+    * [Minimal Imports](#minimal-imports)
+    * [Spacing](#spacing)
 * [Classes and Structures](#classes-and-structures)
     * [App Delegate](#app-delegate)
     * [Singleton](#singleton)
@@ -32,10 +35,12 @@ Our style is based on Ray Wenderlich Style Guide with some changes of ours. Here
 * [Language](#language)
 * [Copyright Statement](#copyright-statement)
 
-
 ## Naming
 
-Use descriptive names with camel case for classes, methods, variables, etc. Class names should be capitalized, while method names and variables should start with a lower case letter.
+Use descriptive names, prioritizing clarity over brevity.
+
+* Use `UpperCamelCase` for types and protocols
+* Use `camelCase` for everything else
 
 **Preferred:**
 
@@ -62,39 +67,55 @@ class app_widgetContainer {
 
 Types such as `Float`, `CGFloat` or `Double` should always be represented as floating point numbers.
 
-**Preffered**
+**Preffered:**
 ```swift
 var floatNumber: Float = 1.0
 ```
-**Not preffered**
+**Not Preffered:**
 ```swift
 var floatNumber: Float = 1
 ```
 
-For functions and init methods, prefer named parameters for all arguments unless the context is very clear. Include external parameter names if it makes function calls more readable.
+For functions and init methods, prefer not omitting argument labels for all parameters unless the context is very clear. Include argument labels before parameters if it makes function calls more readable.
 
 ```swift
-func dateFromString(dateString: String) -> NSDate
-func convertPointAt(column column: Int, row: Int) -> CGPoint
-func timedAction(delay delay: NSTimeInterval, perform action: SKAction) -> SKAction!
+func date(from string: String) -> Date
+func convertPoint(atColumn column: Int, row: Int) -> CGPoint
+func timedAction(delay delay: TimeInterval, perform action: SKAction) -> SKAction!
 
 // would be called like this:
-dateFromString("2014-03-14")
-convertPointAt(column: 42, row: 13)
+date(from: "2014-03-14")
+convertPoint(atColumn: 42, row: 13)
 timedAction(delay: 1.0, perform: someOtherAction)
 ```
 
-For methods, follow the standard Apple convention of referring to the first parameter in the method name:
+### Type Inferred Context
 
+Use compiler inferred context to write shorter, clear code.
+
+**Preferred:**
 ```swift
-class Guideline {
-
-    func combineWithString(incoming: String, options: Dictionary?) { ... }
-    func upvoteBy(amount: Int) { ... }
-}
+let view = UIView(frame: .zero)
+view.backgroundColor = .red
 ```
 
-## Spacing
+**Not Preferred:**
+```swift
+let view = UIView(frame: CGRecrt.zero)
+view.backgroundColor = UIColor.red
+```
+
+## Code Organization
+
+### Unused Code
+
+Unused (dead) code, including Xcode template code and placeholder comments should be removed. An exception is when your tutorial or book instructs the user to use the commented code.
+
+### Minimal Imports
+
+Keep imports minimal. For example, don't import UIKit when importing Foundation will suffice.
+
+### Spacing
 
 * Indent using 4 spaces rather than tabs.
 
@@ -162,7 +183,7 @@ class Example {
 
 ### Which one to use?
 
-Remember, structs have [value semantics](https://developer.apple.com/library/mac/documentation/Swift/Conceptual/Swift_Programming_Language/ClassesAndStructures.html#//apple_ref/doc/uid/TP40014097-CH13-XID_144). Use structs for things that do not have an identity. An array that contains [a, b, c] is really the same as another array that contains [a, b, c] and they are completely interchangeable. It doesn't matter whether you use the first array or the second, because they represent the exact same thing. That's why arrays are structs.
+Remember, structs have [value semantics](https://developer.apple.com/library/mac/documentation/Swift/Conceptual/Swift_Programming_Language/ClassesAndStructures.html#//apple_ref/doc/uid/TP40014097-CH13-XID_144). Use structs for things that do not have an identity. An array that contains `[a, b, c]` is really the same as another array that contains `[a, b, c]` and they are completely interchangeable. It doesn't matter whether you use the first array or the second, because they represent the exact same thing. That's why arrays are structs.
 
 Classes have [reference semantics](https://developer.apple.com/library/mac/documentation/Swift/Conceptual/Swift_Programming_Language/ClassesAndStructures.html#//apple_ref/doc/uid/TP40014097-CH13-XID_145). Use classes for things that do have an identity or a specific life cycle. You would model a person as a class because two person objects are two different things. Just because two people have the same name and birthdate, doesn't mean they are the same person. But the person's birthdate would be a struct because a date of 3 March 1950 is the same as any other date object for 3 March 1950. The date itself doesn't have an identity.
 
@@ -173,7 +194,7 @@ Here's an example of a well-styled class definition:
 ```swift
 class Circle: Shape {
 
-    private var centerX: Int, centerY: Int
+    var x: Int, y: Int
     var radius: Double
     var diameter: Double {
         get {
@@ -183,19 +204,10 @@ class Circle: Shape {
             radius = newValue / 2.0
         }
     }
-    var description: String {
-        return "I am a circle at \(centerString) with an area of \(computedArea)"
-    }
-    override var computedArea: Double {
-        return M_PI * radius * radius
-    }
-    private var centerString: String {
-        return "(\(centerX), \(centerY))"
-    }
 
     init(x: Int, y: Int, radius: Double) {
-        centerX = x
-        centerY = y
+        self.x = x
+        self.y = y
         self.radius = radius
     }
 
@@ -203,9 +215,17 @@ class Circle: Shape {
         self.init(x: x, y: y, radius: diameter / 2.0)
     }
 
-    func doFunnyTrick() {
-        // Here comes a business logic, a complex calculations, etc.
-        // Use computed properties if you only return a value.
+    override func area() -> Double {
+        return Double.pi * radius * radius
+    }
+}
+
+extension Circle: CustomStringConvertible {
+    var description: String {
+        return "center = \(centerString) area = \(area())"
+    }
+    private var centerString: String {
+        return "(\(x),\(y))"
     }
 }
 ```
@@ -216,9 +236,10 @@ The example above demonstrates the following style guidelines:
  + Use computed properties instead of functions when it only returns an instance of class or object and doesn't modify existing instances or states.
  + Define multiple variables and structures on a single line if they share a common purpose / context.
  + Indent getter and setter definitions and property observers.
- + Make wise use of modifiers, but don't add `internal` in case when it is already the default. Similarly, don't repeat the access modifier when overriding a method.
+ + Don't add modifiers such as `internal` when they're already the default. Similarly, don't repeat the access modifier when overriding a method.
+ + Organize extra functionality (e.g. printing) in extensions.
+ + Hide non-shared, implementation details such as `centerString` inside the extension using private access control.
  + Don't bloat view controller's life-cycle methods. Encapsulate code to new setup methods to achieve code clarity.
-
 
 ### App Delegate
 
@@ -234,7 +255,7 @@ Take advantage of Swift's modern syntax and create singletons using static class
 ```swift
 class Users {
 
-    static let sharedInstance = Users()
+    static let shared = Users()
 }
 ```
 
@@ -242,7 +263,7 @@ class Users {
 
 For conciseness, avoid using `self` since Swift does not require it to access an object's properties or invoke its methods.
 
-Use `self` when required to differentiate between property names and arguments in initializers, and when referencing properties in closure expressions (as required by the compiler):
+Use `self` only when required by the compiler (in `@escaping` closures, or in initializers to disambiguate properties from arguments). In other words, if it compiles without `self` then omit it.
 
 ```swift
 class BoardLocation {
@@ -253,7 +274,7 @@ class BoardLocation {
         self.row = row
         self.column = column
 
-        let closure = { [unowned self] in
+        _ = { [unowned self] in
             print(self.row)
         }
     }
@@ -264,7 +285,7 @@ class BoardLocation {
 
 When adding protocol conformance to a class, prefer adding a separate class extension for the protocol methods. This keeps the related methods grouped together with the protocol and can simplify instructions to add a protocol to a class with its associated methods.
 
-Avoid using `// MARK: -` comment to describe extensions. Extension's name should be self explanatory.
+Avoid using `// MARK: -` comment to describe extensions. Extension's name should be self-explanatory.
 
 **Preferred:**
 ```swift
@@ -287,7 +308,6 @@ class ViewController: UIViewController, UITableViewDataSource, UIScrollViewDeleg
     // all methods
 }
 ```
-
 
 ### Computed Properties
 
@@ -314,16 +334,16 @@ var diameter: Double {
 Keep function declarations in one line including the opening brace:
 
 ```swift
-func reticulateSplines(spline: [Double]) -> Bool {
+func reticulate(splines: [Double]) -> Bool {
     // reticulate code goes here
 }
 ```
 
-For functions that take any kind of mathematical parameters or geometric variables, all those parameters should have explicit names:
+For functions that take any kind of mathematical parameters or geometric variables, all those parameters should have explicit, non-omitted names:
 
 ```swift
-func exampleMathFuncWith(x x: Double, y: Double) {
-  // code
+func area(x: Double, y: Double) -> Double {
+    // code
 }
 ```
 
@@ -333,41 +353,38 @@ func exampleMathFuncWith(x x: Double, y: Double) {
 * Use `[unowned self]` in closures if you're sure that `self` will **NEVER** be nil.
 * Use `[weak self]` in closures if you're sure that `self` **COULD** be nil.
 
-**HINT:** For reference and further understanding on the subject please check the [Automatic Reference Counting](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/AutomaticReferenceCounting.html) explanation.
+**HINT:** For reference and further understanding on the subject please check the [Automatic Reference Counting](https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/AutomaticReferenceCounting.html) explanation.
 
 **Preferred:**
 ```swift
-UIView.animateWithDuration(1.0) {
+UIView.animate(withDuration: 1.0) {
     self.myView.alpha = 0.0
 }
 
-UIView.animateWithDuration(1.0, animations: {
-        self.myView.alpha = 0.0
-    }, completion: { finished in
-        self.myView.removeFromSuperview()
-    }
-)
+UIView.animate(withDuration: 1.0, animations: {
+    self.myView.alpha = 0.0
+}, completion: { finished in
+    self.myView.removeFromSuperview()
+})
 ```
 
 **Not Preferred:**
 ```swift
-UIView.animateWithDuration(1.0,
-    animations: {
-      self.myView.alpha = 0.0
+UIView.animate(withDuration: 1.0, animations: {
+    self.myView.alpha = 0.0
 })
 
-UIView.animateWithDuration(1.0,
-    animations: {
-        self.myView.alpha = 0.0
-    }) { f in
-        self.myView.removeFromSuperview()
+UIView.animate(withDuration: 1.0, animations: {
+    self.myView.alpha = 0.0
+}) { f in
+    self.myView.removeFromSuperview()
 }
 ```
 
 * For single-expression closures where the context is clear, use implicit returns:
 
 ```swift
-attendeeList.sort { a, b in a > b }
+attendees.sort { a, b in a > b }
 ```
 
 * Remove not needed `() -> Void` statements in closures. Exception to that rule is when Apple requires the explicit type from us.
@@ -388,7 +405,7 @@ let width: NSNumber = 120.0                          // NSNumber
 let widthString: NSString = width.stringValue        // NSString
 ```
 
-In Sprite Kit code, use `CGFloat` if it makes the code more succinct by avoiding too many conversions.
+Use `CGFloat` if it makes the code more succinct by avoiding too many conversions.
 
 ### Constants
 
@@ -396,6 +413,29 @@ Constants are defined using the `let` keyword, and variables with the `var` keyw
 
 **Tip:** A good technique is to define everything using `let` and only change it to `var` if the compiler complains!
 
+You can define constants on a type rather than on an instance of that type using type properties. To declare a type property as a constant simply use static let. Type properties declared in this way are generally preferred over global constants because they are easier to distinguish from instance properties. Example:
+
+**Preffered:**
+```swift
+class Guideline {
+
+    private enum Constants {
+        static let height = 100.0
+        static let title = "Title"
+    }
+}
+```
+
+**Note:** The advantage of using a case-less enumeration is that it can't accidentally be instantiated and works as a pure namespace.
+
+**Not Preffered:**
+```swift
+class Guideline {
+
+    let height = 100.0
+    let title = "Title"
+}
+```
 
 ### Optionals
 
@@ -423,7 +463,7 @@ var subview: UIView?
 var volume: Double?
 
 // later on...
-if let subview = subview, volume = volume {
+if let subview = subview, let volume = volume {
     // do something with unwrapped subview and volume
 }
 ```
@@ -456,7 +496,7 @@ let bounds = CGRectMake(40, 20, 120, 80)
 let centerPoint = CGPointMake(96, 42)
 ```
 
-Prefer the struct-scope constants `CGRect.infiniteRect`, `CGRect.nullRect`, etc. over global constants `CGRectInfinite`, `CGRectNull`, etc. For existing variables, you can use the shorter `.zeroRect`.
+Prefer the struct-scope constants `CGRect.infinite`, `CGRect.null`, etc. over global constants `CGRectInfinite`, `CGRectNull`, etc. For existing variables, you can use the shorter `.zero`.
 
 ### Type Inference
 
@@ -481,7 +521,7 @@ var names: [String] = []
 
 ### Collections
 
-Usage of methods such as `map`, `flatMap`, `filter`, `enumerate`, `first`, `last` is strongly encouraged.
+Usage of methods such as `map`, `flatMap`, `filter`, `enumerated`, `first`, `last`, `prefix`, `suffix` is strongly encouraged.
 
 ### Syntactic Sugar
 
@@ -506,6 +546,24 @@ var faxNumber: Optional<Int>
 
 ## Control Flow
 
+Prefer the `for-in` style of `for` loop over the `while-condition-increment` style.
+
+**Preffered:**
+```swift
+for _ in 0..<3 {
+    print("Hello three times")
+}
+```
+
+**Not Preffered:**
+```swift
+var i = 0
+while i < 3 {
+    print("Hello three times")
+    i += 1
+}
+```
+
 ### Switch
 * Use `()` notation instead of `break` in default switch cases when there is no other instruction contained in it.
 
@@ -525,11 +583,11 @@ default: ()
 
 **Example**
 ```swift
-guard let str = string where str != "someString" else {  
+guard let string = string, string != "someString" else {  
     fatalError("something went wrong")
 }
 ```
-* Keep `guard` statements comma-separated and avoid repeating `let` or `var` keyword.
+* Keep `guard` statements comma-separated.
 
 **Example**
 ```swift
@@ -537,7 +595,7 @@ var first: Int?
 var second: Int?
 
 func letGuard() {
-    guard let first = first, second = second else { return }
+    guard let first = first, let second = second else { return }
     print(first)
     print(second)
 }
