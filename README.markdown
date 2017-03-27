@@ -113,7 +113,7 @@ Unused (dead) code, including Xcode template code and placeholder comments shoul
 
 ### Minimal Imports
 
-Keep imports minimal. For example, don't import UIKit when importing Foundation will suffice.
+Keep imports minimal. For example, don't import `UIKit` when importing `Foundation` will suffice.
 
 ### Spacing
 
