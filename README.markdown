@@ -67,21 +67,21 @@ class app_widgetContainer {
 
 Types such as `Float`, `CGFloat` or `Double` should always be represented as floating point numbers.
 
-**Preffered:**
+**Preferred:**
 ```swift
 var floatNumber: Float = 1.0
 ```
-**Not Preffered:**
+**Not Preferred:**
 ```swift
 var floatNumber: Float = 1
 ```
 
-For functions and init methods, prefer not omitting argument labels for all parameters unless the context is very clear. Include argument labels before parameters if it makes function calls more readable.
+For functions and init methods, prefer not omitting argument labels for all parameters unless the context is clear. Include argument labels before parameters if it makes function calls more readable.
 
 ```swift
 func date(from string: String) -> Date
 func convertPoint(atColumn column: Int, row: Int) -> CGPoint
-func timedAction(delay delay: TimeInterval, perform action: SKAction) -> SKAction!
+func timedAction(delay: TimeInterval, perform action: SKAction) -> SKAction!
 
 // would be called like this:
 date(from: "2014-03-14")
@@ -101,7 +101,7 @@ view.backgroundColor = .red
 
 **Not Preferred:**
 ```swift
-let view = UIView(frame: CGRecrt.zero)
+let view = UIView(frame: CGRect.zero)
 view.backgroundColor = UIColor.red
 ```
 
@@ -109,11 +109,11 @@ view.backgroundColor = UIColor.red
 
 ### Unused Code
 
-Unused (dead) code, including Xcode template code and placeholder comments should be removed. An exception is when your tutorial or book instructs the user to use the commented code.
+Unused (dead) code, including Xcode template code and placeholder comments should be removed.
 
 ### Minimal Imports
 
-Keep imports minimal. For example, don't import `UIKit` when importing `Foundation` will suffice.
+Keep imports minimal. For example, don't import UIKit when importing Foundation will suffice.
 
 ### Spacing
 
@@ -216,7 +216,7 @@ class Circle: Shape {
     }
 
     override func area() -> Double {
-        return Double.pi * radius * radius
+        return radius * radius * .pi
     }
 }
 
@@ -364,6 +364,7 @@ UIView.animate(withDuration: 1.0) {
 UIView.animate(withDuration: 1.0, animations: {
     self.myView.alpha = 0.0
 }, completion: { finished in
+    guard finished else { return }
     self.myView.removeFromSuperview()
 })
 ```
@@ -377,6 +378,7 @@ UIView.animate(withDuration: 1.0, animations: {
 UIView.animate(withDuration: 1.0, animations: {
     self.myView.alpha = 0.0
 }) { f in
+    guard f else { return }
     self.myView.removeFromSuperview()
 }
 ```
@@ -415,7 +417,7 @@ Constants are defined using the `let` keyword, and variables with the `var` keyw
 
 You can define constants on a type rather than on an instance of that type using type properties. To declare a type property as a constant simply use static let. Type properties declared in this way are generally preferred over global constants because they are easier to distinguish from instance properties. Example:
 
-**Preffered:**
+**Preferred:**
 ```swift
 class Guideline {
 
@@ -428,7 +430,7 @@ class Guideline {
 
 **Note:** The advantage of using a case-less enumeration is that it can't accidentally be instantiated and works as a pure namespace.
 
-**Not Preffered:**
+**Not Preferred:**
 ```swift
 class Guideline {
 
@@ -548,14 +550,14 @@ var faxNumber: Optional<Int>
 
 Prefer the `for-in` style of `for` loop over the `while-condition-increment` style.
 
-**Preffered:**
+**Preferred:**
 ```swift
 for _ in 0..<3 {
     print("Hello three times")
 }
 ```
 
-**Not Preffered:**
+**Not Preferred:**
 ```swift
 var i = 0
 while i < 3 {
